@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Kemilly Vitória! ❤️</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- MODAL DE ZOOM (SÓ APARECE NO CLIQUE) -->
+    <div id="modal-foto" onclick="fecharFoto()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;">
+        <span style="color: white; font-size: 40px; position: absolute; top: 20px; right: 30px; cursor: pointer;">&times;</span>
+        <img id="foto-expandida" style="max-width: 90%; max-height: 80%; border-radius: 10px;">
+        <p id="legenda-modal" style="color: white; margin-top: 20px; font-family: 'Quicksand', sans-serif; text-align: center; padding: 0 20px;"></p>
+    </div>
+
+    <!-- TELA DE LOGIN -->
+    <div id="login-screen">
+        <div class="login-box">
+            <img src="img/foto-dela.jpg" class="foto-login">
+            <h2>Pergunta de Segurança:</h2>
+            <p>Quem é a menina mais linda do mundo?</p>
+            <input type="text" id="nome-entrada" placeholder="Digite o nome..." autocomplete="off">
+            <button id="btn-acessar" onclick="verificarAcesso()">Acessar ❤️</button>
+            <p id="erro-login" style="display: none; margin-top: 15px; font-size: 0.9rem;"></p>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main id="app" style="display: none;">
+        <section id="hero">
+            <img src="img/foto-dela.jpg" class="foto-perfil">
+            <h1>Oiee, Kemilly Vitória! ❤️</h1>
+            
+            <div id="sessao-inicial">
+                <p>Preparei uma surpresinha para você... Topa um desafio rápido?</p>
+                <button id="btn-jogar" onclick="iniciarJogo()">Começar Desafio 🎮</button>
+            </div>
+        </section>
+
+        <!-- ÁREA DO JOGO -->
+        <section id="game-canvas" style="display: none;">
+            <p>Clique nos itens antes que sumam!</p>
+            <div id="placar">Itens: <span id="score">0</span> / 10</div>
+            <div id="area-clique"></div>
+        </section>
+
+        <!-- MENSAGEM FINAL (ESCONDIDA ATÉ O FIM DO JOGO) -->
+        <section id="mensagem-final" style="display: none;">
+            <h2 style="margin-top: 20px;">🏆 Você venceu!</h2>
+            <p>E o seu prêmio é saber que...</p>
+            <h1 class="blink" style="font-size: 2.2rem; line-height: 1.2;">Apesar de você não tomar banho... Eu te amo! ❤️</h1>
+            
+            <hr style="border: 1px dashed #ffb3c1; margin: 30px 0;">
+
+            <button id="btn-secreto" onclick="revelarGaleriaSecreta()">
+                Abrir Arquivo Secreto 🤫
+            </button>
+            
+            <!-- GALERIA (SÓ APARECE NO CLIQUE DO BOTÃO ACIMA) -->
+            <div id="galeria-secreta" style="display: none; margin-top: 30px;">
+                <h2 style="font-size: 1.2rem; margin-bottom: 20px;">✨ O Arquivo Secreto da Kemilly ✨</h2>
+                <div class="galeria-container">
+                    
+                    <div class="card-galeria zoeira" onclick="abrirFoto(this)">
+                        <img src="img/foto-zoada-1.jpg">
+                        <p class="legenda">As vezes ela é um hominho 😂</p>
+                    </div>
+
+                    <div class="card-galeria princesa" onclick="abrirFoto(this)">
+                        <img src="img/foto-princesa-1.jpg">
+                        <p class="legenda">As vezes uma princesa ❤️</p>
+                    </div>
+
+                    <div class="card-galeria zoeira" onclick="abrirFoto(this)">
+                        <img src="img/foto-zoada-2.jpg">
+                        <p class="legenda">Jurooo que é uma princesa! Hahaha 😂</p>
+                    </div>
+
+                    <div class="card-galeria princesa" onclick="abrirFoto(this)">
+                        <img src="img/foto-princesa-2.jpg">
+                        <p class="legenda">Mas é a MINHA princesa favorita! ❤️👑</p>
+                    </div>
+
+                </div>
+                <p style="margin-top: 30px; font-style: italic; color: #777; font-size: 0.8rem;">(Clique na foto para ver inteira!)</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Lógica de Acesso e Mensagens para as Irmãs
+        const mensagensIrmas = {
+            "mikaelly": "Mikaaaa! Você é uma irmã incrível, mas esse site é uma surpresa para a Kemilly. 😉",
+            "thaynara": "Thaygataaa! Você mora no meu coração, mas hoje o brilho é da Kemilly! ❤️",
+            "lorrayne": "E aí, Lorrayne! Amo você, mas isso aqui é pra pé preto da sua irmã kkkk!",
+            "isabelly": "Isaaaa meu nenê! A senha hoje é o nome da sua irmã mais velha! ❤️"
+        };
+
+        function verificarAcesso() {
+            const entrada = document.getElementById('nome-entrada');
+            const nome = entrada.value.trim().toLowerCase();
+            const erro = document.getElementById('erro-login');
+            
+            if (nome === "kemilly" || nome === "kemilly vitoria") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                return;
+            }
+
+            if (mensagensIrmas[nome]) {
+                erro.innerText = mensagensIrmas[nome];
+                erro.style.color = "#ff758f";
+            } else {
+                erro.innerText = "Hum... acho que esse não é o nome dela! 🤨";
+                erro.style.color = "#d63031";
+            }
+            erro.style.display = 'block';
+            entrada.value = "";
+        }
+
+        // Enter no teclado
+        document.getElementById('nome-entrada').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verificarAcesso();
+        });
+
+        // Lógica do Jogo
+        let pontos = 0;
+        const gostosDela = ['❤️', '🚗', '🏀', '🔴', '⚪', '⚫', '👑'];
+
+        function iniciarJogo() {
+            pontos = 0;
+            document.getElementById('score').innerText = pontos;
+            document.getElementById('sessao-inicial').style.display = 'none';
+            document.getElementById('game-canvas').style.display = 'block';
+            criarElemento();
+        }
+
+        function criarElemento() {
+            const area = document.getElementById('area-clique');
+            area.innerHTML = ''; 
+            const el = document.createElement('div');
+            el.innerHTML = gostosDela[Math.floor(Math.random() * gostosDela.length)];
+            el.style.cssText = `position:absolute; font-size:50px; cursor:pointer; user-select:none; left:${Math.random()*80}%; top:${Math.random()*80}%;`;
+
+            el.onclick = () => {
+                pontos++;
+                document.getElementById('score').innerText = pontos;
+                if (pontos < 10) criarElemento();
+                else {
+                    document.getElementById('game-canvas').style.display = 'none';
+                    document.getElementById('mensagem-final').style.display = 'block';
+                }
+            };
+            area.appendChild(el);
+        }
+
+        // Lógica da Galeria Secreta
+        function revelarGaleriaSecreta() {
+            const gal = document.getElementById('galeria-secreta');
+            const btn = document.getElementById('btn-secreto');
+            if (gal.style.display === 'none') {
+                gal.style.display = 'block';
+                btn.innerText = "ESCONDER LOGO! 🙈";
+            } else {
+                gal.style.display = 'none';
+                btn.innerText = "Abrir Arquivo Secreto 🤫";
+            }
+        }
+
+        // Lógica do Zoom (Lightbox)
+        function abrirFoto(elemento) {
+            const modal = document.getElementById('modal-foto');
+            document.getElementById('foto-expandida').src = elemento.querySelector('img').src;
+            document.getElementById('legenda-modal').innerText = elemento.querySelector('.legenda').innerText;
+            modal.style.display = 'flex';
+        }
+
+        function fecharFoto() {
+            document.getElementById('modal-foto').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
